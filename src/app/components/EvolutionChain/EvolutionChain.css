@@ -1,0 +1,200 @@
+/* ----------------------------- */
+/* Evolution Chain - Section Layout */
+/* ----------------------------- */
+
+.evolution-chain-section {
+  width: 100%;
+  background: linear-gradient(135deg, #f6f8fc, #e9ecef);
+  padding: 1rem;
+  border-radius: 15px;
+  margin: 0.5rem 0;
+  border: 1px solid #e9ecef;
+}
+
+.evolution-section-title {
+  color: #011030;
+  margin-bottom: 15px;
+  font-weight: 700;
+  text-align: left;
+  font-size: 1rem;
+}
+
+/* ----------------------------- */
+/* Evolution Chain - Layout Container */
+/* ----------------------------- */
+
+.evolution-chain-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.evolution-step {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+/* ----------------------------- */
+/* Evolution Chain - Pokémon Cards */
+/* ----------------------------- */
+
+.evolution-pokemon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  min-width: clamp(60px, 10vw, 80px);
+}
+
+.evolution-pokemon:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.evolution-pokemon-image {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+.evolution-pokemon:hover .evolution-pokemon-image {
+  transform: scale(1.1);
+}
+
+.evolution-pokemon-name {
+  font-size: 0.6875rem; /* 11px */
+  color: #011030;
+  font-weight: 600;
+  text-transform: capitalize;
+  text-align: center;
+  margin-top: 5px;
+}
+
+/* ----------------------------- */
+/* Evolution Chain - Arrow & Requirement */
+/* ----------------------------- */
+
+
+.evolution-requirement {
+  font-size: 0.625rem; /* 10px */
+  color: #000000;
+  font-weight: 600;
+  text-transform: capitalize;
+  letter-spacing: 0.5px;
+  background: #fff;
+  padding: 3px 8px;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100px;
+}
+
+.evolution-final-label {
+  font-size: 0.625rem; /* 10px */
+  color: #8f9396;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  background: #fff;
+  padding: 3px 8px;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100px;
+}
+
+
+/* ----------------------------- */
+/* Evolution Chain - Loading */
+/* ----------------------------- */
+
+.evolution-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.evolution-loading-spinner {
+  width: 24px;
+  height: 24px;
+  background: linear-gradient(45deg, #ff5350, #ff8a80);
+  border-radius: 50%;
+  animation: evolution-spin 1s linear infinite;
+}
+
+@keyframes evolution-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* ----------------------------- */
+/* Responsive Design */
+/* ----------------------------- */
+
+@media (max-width: 768px) {
+  .evolution-chain-container {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .evolution-step {
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .evolution-arrow-container {
+    flex-direction: row;
+    margin: 0 15px;
+  }
+
+  .evolution-arrow {
+    margin-right: 5px;
+    margin-bottom: 0;
+  }
+
+  .evolution-pokemon-image {
+    width: 50px;
+    height: 50px;
+  }
+}
+
+@media (max-width: 480px) {
+  .evolution-pokemon {
+    padding: 8px;
+  }
+
+  .evolution-pokemon-image {
+    width: 40px;
+    height: 40px;
+  }
+
+  .evolution-pokemon-name {
+    font-size: 0.625rem; /* 10px */
+  }
+
+  .evolution-requirement {
+    font-size: 0.5625rem; /* 9px */
+    padding: 2px 6px;
+  }
+}

@@ -1,0 +1,15 @@
+/*-----------------------------------------------------------*/
+/* Fonts CSS */
+/*-----------------------------------------------------------*/
+
+/* Alle Fonts Lokal eingebunden */
+
+/* -------------------Avant Garde Font START--------------------------*/
+
+
+@font-face {
+  font-family: "Outfit-Medium";
+  src: url("/src/app/fonts/Outfit-Medium.ttf") format("truetype");
+  font-weight: 400; /* Definiere die unterstützten Gewichtungen */
+  font-style: normal;
+}
