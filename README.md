@@ -20,7 +20,7 @@
 
   <h1 align="center">
     <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Activities/Crystal%20Ball.png" alt="🔮" width="30" height="30" />
-    Ultimate Pokédex
+   This is just a GitHub template. I will work on the README file in a few weeks.
     <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Activities/Crystal%20Ball.png" alt="🔮" width="30" height="30" />
   </h1>
 
