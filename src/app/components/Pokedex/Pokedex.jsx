@@ -1,5 +1,6 @@
 'use client';
 import { useState, useEffect, useCallback } from 'react';
+import { Heart, Moon, Sun } from 'lucide-react';
 import EvolutionChain from '../EvolutionChain/EvolutionChain';
 import './Pokedex.css';
 
@@ -32,14 +33,62 @@ const Pokedex = () => {
   const [topMoves, setTopMoves] = useState([]);
   const [locations, setLocations] = useState([]);
   const [typeFilter, setTypeFilter] = useState(null);
+  const [isClient, setIsClient] = useState(false);
+  const [favorites, setFavorites] = useState([]);
+  const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
+  const [darkMode, setDarkMode] = useState(false);
 
 
-  // Fetch Pokemon list on mount
+  // Set client-side flag and fetch Pokemon list on mount
   useEffect(() => {
+    setIsClient(true);
+    
+    // Load dark mode FIRST and apply immediately to prevent flash
+    const savedDarkMode = localStorage.getItem('pokemonDarkMode');
+    if (savedDarkMode !== null) {
+      const isDark = JSON.parse(savedDarkMode);
+      setDarkMode(isDark);
+      // Apply dark mode class immediately
+      if (isDark) {
+        document.body.classList.add('dark-mode');
+      } else {
+        document.body.classList.remove('dark-mode');
+      }
+    } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      setDarkMode(true);
+      document.body.classList.add('dark-mode');
+    }
+    
+    // Load favorites from localStorage
+    const savedFavorites = localStorage.getItem('pokemonFavorites');
+    if (savedFavorites) {
+      setFavorites(JSON.parse(savedFavorites));
+    }
+    
+    // Fetch Pokemon list
     fetchPokemonList();
   }, []);
 
-  // Handle search
+  // Save favorites to localStorage
+  useEffect(() => {
+    if (isClient) {
+      localStorage.setItem('pokemonFavorites', JSON.stringify(favorites));
+    }
+  }, [favorites, isClient]);
+
+  // Save dark mode to localStorage and apply to body
+  useEffect(() => {
+    if (isClient) {
+      localStorage.setItem('pokemonDarkMode', JSON.stringify(darkMode));
+      if (darkMode) {
+        document.body.classList.add('dark-mode');
+      } else {
+        document.body.classList.remove('dark-mode');
+      }
+    }
+  }, [darkMode, isClient]);
+
+  // Handle search and filters
 useEffect(() => {
   let filtered = pokemonList;
 
@@ -55,8 +104,14 @@ useEffect(() => {
     );
   }
 
+  if (showFavoritesOnly) {
+    filtered = filtered.filter(pokemon =>
+      favorites.includes(pokemon.name)
+    );
+  }
+
   setFilteredPokemon(filtered);
-}, [searchTerm, typeFilter, pokemonList]);
+}, [searchTerm, typeFilter, pokemonList, showFavoritesOnly, favorites]);
 
 
 
@@ -175,6 +230,25 @@ const fetchPokemonList = async () => {
 
   const handlePokemonClick = (pokemon) => {
     fetchPokemonDetails(pokemon.url);
+  };
+
+  const toggleFavorite = (pokemonName, event) => {
+    event.stopPropagation(); // Prevent card click
+    setFavorites(prev => {
+      if (prev.includes(pokemonName)) {
+        return prev.filter(name => name !== pokemonName);
+      } else {
+        return [...prev, pokemonName];
+      }
+    });
+  };
+
+  const isFavorite = (pokemonName) => {
+    return favorites.includes(pokemonName);
+  };
+
+  const toggleDarkMode = () => {
+    setDarkMode(prev => !prev);
   };
 
   const scrollToTop = () => {
@@ -297,6 +371,16 @@ const getTypeColor = (type) => {
     return result;
   };
 
+  // Prevent hydration mismatch by not rendering until client-side
+  if (!isClient) {
+    return (
+      <div className="pokedex-loading-wrapper">
+        <div className="pokedex-loading-pokeball"></div>
+        <h2>Loading Pokédex...</h2>
+      </div>
+    );
+  }
+
   if (loading) {
     return (
       <div className="pokedex-loading-wrapper">
@@ -314,41 +398,71 @@ const getTypeColor = (type) => {
       <div className="pokedex-content-container">
         {/* Main Pokemon List */}
         <div className="pokedex-pokemon-list-section">
-          {/* Search Bar */}
-          <div className="pokedex-search-container">
-            <div className="pokedex-search-input-wrapper">
-              <input
-                type="text"
-                placeholder="Search Pokemon..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pokedex-search-input"
-              />
-              <div className="pokedex-search-button">
-                🔍
+          {/* Header with Search and Controls */}
+          <div className="pokedex-header">
+            <div className="pokedex-search-container">
+              <div className="pokedex-search-input-wrapper">
+                <input
+                  type="text"
+                  placeholder="Search Pokemon by name or number..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="pokedex-search-input"
+                />
               </div>
+            </div>
+            
+            {/* Control Buttons */}
+            <div className="pokedex-controls">
+              <button
+                className={`pokedex-control-button ${showFavoritesOnly ? 'active' : ''}`}
+                onClick={() => setShowFavoritesOnly(!showFavoritesOnly)}
+                title={showFavoritesOnly ? 'Show all Pokemon' : 'Show favorites only'}
+              >
+                <Heart 
+                  size={20} 
+                  fill={showFavoritesOnly ? 'currentColor' : 'none'}
+                  strokeWidth={2}
+                />
+                <span className="pokedex-control-label">
+                  Favorites {favorites.length > 0 && `(${favorites.length})`}
+                </span>
+              </button>
+              
+              <button
+                className="pokedex-control-button pokedex-darkmode-toggle"
+                onClick={toggleDarkMode}
+                title={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+              >
+                {darkMode ? <Sun size={20} /> : <Moon size={20} />}
+                <span className="pokedex-control-label">
+                  {darkMode ? 'Light' : 'Dark'}
+                </span>
+              </button>
             </div>
           </div>
 
-        {/* Filter-Buttons Nach Type Simple clean shit */}
+        {/* Type Filter Buttons */}
             <div className="pokedex-type-filter">
-              {/* Reset/Clear Button */}
               <button
-                className={`type-filter-button reset-button ${!typeFilter ? 'active' : ''}`}
+                className={`type-filter-button all-types ${!typeFilter ? 'active' : ''}`}
                 onClick={() => setTypeFilter(null)}
               >
-                All Types
+                All
               </button>
               
               {[
-                'fire', 'water', 'grass', 'electric', 'bug', 'normal', 
-                'poison', 'ground', 'flying', 'psychic', 'rock', 
-                'ghost', 'ice', 'dragon', 'dark', 'steel', 'fairy'
+                'normal', 'fire', 'water', 'grass', 'electric', 'ice', 
+                'fighting', 'poison', 'ground', 'flying', 'psychic', 'bug',
+                'rock', 'ghost', 'dragon', 'dark', 'steel', 'fairy'
               ].map(type => (
                 <button
                   key={type}
                   className={`type-filter-button ${typeFilter === type ? 'active' : ''}`}
-                  style={{ backgroundColor: getTypeColor(type) }}
+                  style={{ 
+                    backgroundColor: typeFilter === type ? getTypeColor(type) : 'transparent',
+                    borderColor: getTypeColor(type)
+                  }}
                   onClick={() => setTypeFilter(typeFilter === type ? null : type)}
                 >
                   {type}
@@ -363,12 +477,24 @@ const getTypeColor = (type) => {
               {filteredPokemon.map((pokemon) => {
                 const pokemonId = getPokemonId(pokemon.url);
                 const numericId = parseInt(pokemonId);
+                const favorite = isFavorite(pokemon.name);
                 return (
                   <div
                     key={pokemon.name}
                     className="pokedex-pokemon-card"
                     onClick={() => handlePokemonClick(pokemon)}
                   >
+                    <button
+                      className={`pokedex-favorite-button ${favorite ? 'is-favorite' : ''}`}
+                      onClick={(e) => toggleFavorite(pokemon.name, e)}
+                      aria-label={favorite ? 'Remove from favorites' : 'Add to favorites'}
+                    >
+                      <Heart 
+                        size={20} 
+                        fill={favorite ? 'currentColor' : 'none'}
+                        strokeWidth={2}
+                      />
+                    </button>
                     <img
                       src={getPokemonSprite(numericId)}
                       alt={pokemon.name}
