@@ -30,7 +30,7 @@
   <tr>
     <td align="center">
       <a href="https://github.com/GylanSalih/Pokedex">
-        <img src="https://github.com/GylanSalih/Pokedex/blob/main/public/assets/img/showcase/pokedex1.png" alt="Pokedex 1" width="450">
+        <img src="https://github.com/GylanSalih/Pokedex/blob/main/public/assets/img/showcase/pokedex1.png" alt="Pokedex 1" width="500" height="500">
       </a>
     </td>
     <td align="center">
