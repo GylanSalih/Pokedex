@@ -35,19 +35,19 @@
     </td>
     <td align="center">
       <a href="https://github.com/GylanSalih/Pokedex">
-        <img src="https://github.com/GylanSalih/Pokedex/blob/main/public/assets/img/showcase/pokedex2.png" alt="Pokedex 2" width="250">
+        <img src="https://github.com/GylanSalih/Pokedex/blob/main/public/assets/img/showcase/pokedex2.png" alt="Pokedex 2" width="500">
       </a>
     </td>
     <td align="center">
       <a href="https://github.com/GylanSalih/Pokedex">
-        <img src="https://github.com/GylanSalih/Pokedex/blob/main/public/assets/img/showcase/pokedex3.png" alt="Pokedex 3" width="250">
+        <img src="https://github.com/GylanSalih/Pokedex/blob/main/public/assets/img/showcase/pokedex3.png" alt="Pokedex 3" width="500">
       </a>
     </td>
   </tr>
   <tr>
     <td align="center" colspan="3">
       <a href="https://github.com/GylanSalih/Pokedex">
-        <img src="https://github.com/GylanSalih/Pokedex/blob/main/public/assets/img/showcase/pokedex4.png" alt="Pokedex 4" width="250">
+        <img src="https://github.com/GylanSalih/Pokedex/blob/main/public/assets/img/showcase/pokedex4.png" alt="Pokedex 4" width="500">
       </a>
     </td>
   </tr>
